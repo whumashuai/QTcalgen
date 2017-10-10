@@ -1,44 +1,132 @@
 #include "simchinese.h"
 #include "ui_simchinese.h"
-#include<QTime>
-#include<QTimer>
+#include "engnum.h"
+#include "global.h"
+#include "fraction.h"
+#include "Generate.h"
+using namespace std;
+extern deque<string> C_expression;
+extern deque<string> C_result;
 
-SimChinese::SimChinese(QWidget *parent) :
+
+int j;
+
+simchinese::simchinese(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SimChinese)
+    ui(new Ui::simchinese)
 {
     ui->setupUi(this);
-
-    QTimer *timer = new QTimer(this);
-
-    connect(timer,SIGNAL(timeout()),this,SLOT(on_lcdNumber_overflow()));
-    timer->start(500);
+    ui->textEdit_2->setReadOnly(true);
+    ui->lineEdit->setReadOnly(true);
+    ui->lineEdit_3->setReadOnly(true);
 }
 
-SimChinese::~SimChinese()
+simchinese::~simchinese()
 {
     delete ui;
 }
 
-void SimChinese::receiveshow()//接收信号，显示界面
+void simchinese::print()
+{
+    string s=C_expression.front();
+    QString qs=QString::fromStdString(s);
+    ui->lineEdit->setText(qs);
+    C_expression.pop_front();
+}
+
+void simchinese::receiveshow()//接收信号，显示界面
 {
     this->show();
+    j=1;
+    QString s=QString::number(j,10);
+    ui->lineEdit_3->setText(s);
+
+    print();
 }
 
-void SimChinese::on_pushButton_clicked()
+void simchinese::on_pushButton_clicked()//return
 {
     this->hide();
-    emit sishowmain();
+    emit simshownum();
+
 }
 
-void SimChinese::on_pushButton_2_clicked()
+void simchinese::on_pushButton_2_clicked()//exit
 {
     emit quit();
+
 }
 
-void SimChinese::on_lcdNumber_overflow()//show time
+void simchinese::on_pushButton_3_clicked()//commit
 {
-    QTime time=QTime::currentTime();
-    QString  txtTime=time.toString("hh:mm:ss");
-    ui->lcdNumber->display(txtTime);
+    int cnt = 100/global::globaldata;
+    int cou = 0;
+    QString kp="";
+    QString data=ui->lineEdit_2->text();
+    string re=C_result.front();
+    C_result.pop_front();
+    QString data2=QString::fromStdString(re);
+    if(data == data2)
+    {
+        cou++;
+        kp="正确";
+        kp.append("\n");
+
+    }
+    else
+    {
+        kp="错误";
+        kp.append("\n");
+        QString kpl="正确答案: ";
+        kp.append(kpl);
+        kp.append(data2);
+        kp.append("\n");
+    }
+
+    if(j == global::globaldata)
+    {
+        QString kp1="本次共有";
+        kp.append(kp1);
+        int kk=global::globaldata;
+        QString kp6=QString::number(kk,10);
+        kp.append(kp6);
+        QString kp5=" 题,总分100分";
+        kp.append(kp5);
+        kp.append("\n");
+        if(cou == global::globaldata)
+        {
+            QString kp2="本次得分: 100 分";
+            kp.append(kp2);
+        }
+        else
+        {
+            QString kp3="本次得分: ";
+            kp.append(kp3);
+            int kk=cou*cnt;
+            QString str=QString::number(kk,'f',2);
+            kp.append(str);
+            QString kp4="分";
+            kp.append(kp4);
+        }
+
+
+    }
+    ui->textEdit->setText(kp);
+
+}
+
+void simchinese::on_pushButton_4_clicked()//next
+{
+    j++;
+    QString nul="";
+    if(j<=global::globaldata)
+    {
+        QString s=QString::number(j,10);
+        ui->lineEdit_3->setText(s);
+        ui->lineEdit_2->setText(nul);
+        ui->textEdit->setText(nul);
+
+        print();
+    }
+
 }

@@ -4,16 +4,17 @@
 #include <QDialog>
 
 namespace Ui {
-class SimChinese;
+class simchinese;
 }
 
-class SimChinese : public QDialog
+class simchinese : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit SimChinese(QWidget *parent = 0);
-    ~SimChinese();
+    explicit simchinese(QWidget *parent = 0);
+    ~simchinese();
+    void print();
 
 private slots:
     void on_pushButton_clicked();
@@ -21,14 +22,17 @@ private slots:
     void on_pushButton_2_clicked();
 
     void receiveshow();//与发射的信号关联的槽
-    void on_lcdNumber_overflow();//时钟
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
 
 signals:
-    void sishowmain();//显示主界面
+    void simshownum();//show simnum
     void quit();//退出
 
 private:
-    Ui::SimChinese *ui;
+    Ui::simchinese *ui;
 };
 
 #endif // SIMCHINESE_H

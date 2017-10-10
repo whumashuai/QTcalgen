@@ -4,16 +4,17 @@
 #include <QDialog>
 
 namespace Ui {
-class traChinese;
+class trachinese;
 }
 
-class traChinese : public QDialog
+class trachinese : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit traChinese(QWidget *parent = 0);
-    ~traChinese();
+    explicit trachinese(QWidget *parent = 0);
+    ~trachinese();
+    void print();
 
 private slots:
     void on_pushButton_clicked();
@@ -22,12 +23,16 @@ private slots:
 
     void receiveshow();//与发射的信号关联的槽
 
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
 signals:
-    void trshowmain();//显示主界面
+    void trashownum();//show tranum
     void quit();//退出
 
 private:
-    Ui::traChinese *ui;
+    Ui::trachinese *ui;
 };
 
 #endif // TRACHINESE_H

@@ -18,25 +18,28 @@ void MainWindow::receivereturn()
     this->show();
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked()//simchinese
 {
     this->hide();
     emit signalsim();
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked()//trachinese
 {
     this->hide();
     emit signaltra();
+
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_3_clicked()//english
 {
     this->hide();
     emit signalEng();
+
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_pushButton_4_clicked()//exit
 {
     emit quit();
+
 }

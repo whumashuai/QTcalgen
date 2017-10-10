@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+
+
 namespace Ui {
 class English;
 }
@@ -14,15 +16,21 @@ class English : public QDialog
 public:
     explicit English(QWidget *parent = 0);
     ~English();
+    void print();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_clicked();//return
 
-    void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();//exit
 
     void receiveshow();//与发射的信号关联的槽
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
 signals:
-    void enshowmain();//显示主界面
+    void engshownum();//show engnum
     void quit();//退出
 
 private:
