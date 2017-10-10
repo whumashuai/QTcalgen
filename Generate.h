@@ -23,16 +23,12 @@ public:
 
 	void random(); //Automatically generate integers and fractions
 
-	void GenerateExpression();//Generate Expression
+	void GenerateExpression(int n);//Generate Expression
+
+	void del();
+	void Answer();
 
 	string IntToString(int n);//int converted to string
 	string charToString(char n);//char converted to string
 
-	string printExpression();//Output the expression
-
-	Fraction printAnswer();//Output the answer
-
-private:
-	deque <Fraction> space;
-	deque <Fraction> line; //Store the formula
 };

@@ -2,6 +2,7 @@
 #include"Calculate.h"
 #include"FractionCalculate.h"
 
+
 Calculate::Calculate()
 {
 

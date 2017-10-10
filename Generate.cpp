@@ -1,12 +1,23 @@
 #include"stdafx.h"
 #include"Generate.h"
 #include"FractionCalculate.h"
+#include"memory.h"
 #include"Calculate.h"
+#include<iostream>
+#include<windows.h>
+using namespace std;
 
 Generate::Generate()
 {
-
+	
 }
+
+void Generate::del()
+{
+	space.clear(); //Initialization
+	line.clear();
+}
+
 void Generate::Generateoperators()//Generate the operation symbol
 {
 	int num = rand() % 4 + 1;
@@ -87,31 +98,16 @@ void Generate::random() //Automatically generate integers and fractions
 	}
 }
 
-void Generate::GenerateExpression()
+void Generate::GenerateExpression(int n)
 {
-	srand((unsigned)time(0));
-	int operatorsnum = rand() % 12 + 3;//Generate the number of operands
-	int bracketsid = rand() % 2;
-	int bracketnum = 0; //The pair of brackets
-	if (bracketsid == 0)//Generate left bracks
+	for (int i = 1;i <= n;i++)
 	{
-		Fraction fc;
-		fc.deno = 1;
-		fc.numer = 0;
-		fc.symbol = '(';
-		space.push_back(fc);
-		line.push_back(fc);
-		bracketnum++;
-	}
-
-	random();
-
-	for (int j = 0;j < operatorsnum;j++)
-	{
-		Generateoperators();
-
-		bracketsid = rand() % 2;
-		if (bracketsid == 0 && j<operatorsnum - 1)
+		Sleep(1000);
+		srand((unsigned)time(0));
+		int operatorsnum = rand() % 8 + 3;//Generate the number of operands 
+		int bracketsid = rand() % 2;
+		int bracketnum = 0; //The pair of brackets
+		if (bracketsid == 0)//Generate left bracks
 		{
 			Fraction fc;
 			fc.deno = 1;
@@ -120,32 +116,57 @@ void Generate::GenerateExpression()
 			space.push_back(fc);
 			line.push_back(fc);
 			bracketnum++;
-			random();
 		}
-		else
+
+		random();
+
+		for (int j = 0;j < operatorsnum;j++)
 		{
-			random();
-			if (bracketnum > 0 && bracketsid == 1)
+			Generateoperators();
+
+			bracketsid = rand() % 2;
+			if (bracketsid == 0 && j<operatorsnum - 1)
 			{
 				Fraction fc;
 				fc.deno = 1;
 				fc.numer = 0;
-				fc.symbol = ')';
+				fc.symbol = '(';
 				space.push_back(fc);
 				line.push_back(fc);
-				bracketnum--;
+				bracketnum++;
+				random();
+			}
+			else
+			{
+				random();
+				if (bracketnum > 0 && bracketsid == 1)
+				{
+					Fraction fc;
+					fc.deno = 1;
+					fc.numer = 0;
+					fc.symbol = ')';
+					space.push_back(fc);
+					line.push_back(fc);
+					bracketnum--;
+				}
 			}
 		}
-	}
-	while (bracketnum > 0)
-	{
-		Fraction fc;
-		fc.deno = 1;
-		fc.numer = 0;
-		fc.symbol = ')';
-		space.push_back(fc);
-		line.push_back(fc);
-		bracketnum--;
+		while (bracketnum > 0)
+		{
+			Fraction fc;
+			fc.deno = 1;
+			fc.numer = 0;
+			fc.symbol = ')';
+			space.push_back(fc);
+			line.push_back(fc);
+			bracketnum--;
+		}
+		Answer();
+		if (temp == 1)
+		{
+			i = i - 1;
+			temp = 0;
+		}
 	}
 }
 
@@ -163,52 +184,100 @@ string Generate::charToString(char n)//char converted to string
 	return newstr.str();
 }
 
-string Generate::printExpression()//Output the expression
+void Generate::Answer()
 {
+	string n;
 	string re;
-	while (!line.empty())
+	string exp;
+
+	Fraction ans;
+	Calculate cal;
+	ans = cal.calculateExpression(space);
+	if (ans.numer < 0 || ans.deno <= 0 || ans.numer > 100 || ans.deno > 100)//Control the final result is not negative, the numerator and denominator of the score are less than 100
 	{
-		Fraction fcc = line.front();
-		if (fcc.symbol == '(' || fcc.symbol == ')')
+		temp = 1;
+	}
+	else
+	{
+		while (!line.empty())
 		{
-			re = re + charToString(fcc.symbol);
+			Fraction fcc = line.front();
+			if (fcc.symbol == '(' || fcc.symbol == ')')
+			{
+				exp = exp + charToString(fcc.symbol);
+			}
+			else if (fcc.symbol == '+' || fcc.symbol == '-')
+			{
+				exp = exp + charToString(fcc.symbol);
+			}
+			else if (fcc.symbol == '*')
+			{
+				const char* c_s = "¡Á";
+				string tmp(c_s);
+				exp = exp + tmp;
+			}
+			else if (fcc.symbol == '/')
+			{
+				const char* c_s = "¡Â";
+				string tmp(c_s);
+				exp = exp + tmp;
+			}
+			else
+			{
+				if (fcc.symbol == '|')
+				{
+					if (fcc.deno == 1)
+					{
+						exp = exp + IntToString(fcc.numer);
+					}
+					else
+					{
+						exp = exp + IntToString(fcc.numer);
+						exp = exp + "/";
+						exp = exp + IntToString(fcc.deno);
+					}
+				}
+			}
+			line.pop_front();
 		}
-		else if (fcc.symbol == '+' || fcc.symbol == '-')
+		expression.push_back(exp);
+		string tmp;
+		if (ans.deno == 1) //Convert the result to a string type
 		{
-			re = re + charToString(fcc.symbol);
-		}
-		else if (fcc.symbol == '*')
-		{
-			string tmp = "¡Á";
-			re = re + tmp;
-		}
-		else if (fcc.symbol == '/')
-		{
-			string tmp = "¡Â";
-			re = re + tmp;
+			stringstream ss;
+			ss << ans.numer;
+			ss >> re;
+			tmp = re;
 		}
 		else
 		{
-			if (fcc.symbol == '|')
-			{
-				if (fcc.deno == 1)
-				{
-					re = re + IntToString(fcc.deno);
-				}
-				else
-				{
-					re = re + IntToString(fcc.numer);
-					re = re + charToString(fcc.symbol);
-					re = re + IntToString(fcc.deno);
-				}
-			}
+			string a, b;
+			stringstream ss;
+			ss << ans.numer;
+			ss >> a;
+
+			string c = "/";
+			string re = a + c;
+			stringstream sss;
+			sss << ans.deno;
+			sss >> b;
+			re.append(b);
+			tmp = re;
 		}
+		result.push_back(tmp);
 	}
-	return re;
+
+	while (!expression.empty())
+	{
+		cout << expression.front() << endl;
+		cout << result.front() << endl;
+		expression.pop_front();
+		result.pop_front();
+	}
+	expression.clear();
+	result.clear();
+
+	space.clear(); //Initialization
+	line.clear();
 }
 
-Fraction Generate::printAnswer()//Output the answer
-{
-	Calculate cal;
-	return cal.calculateExpression(space);
-}
