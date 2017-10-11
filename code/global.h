@@ -12,8 +12,8 @@ class global
 {
 public:
     global();
-    static int globaldata;
-    static QString qs;
+    static int globaldata;//global variable
+    static QString qs;//global variable
 };
 
 #endif // GLOBAL_H

@@ -1,15 +1,14 @@
 #include"stdafx.h"
 #include"Generate.h"
 #include"FractionCalculate.h"
-#include"memory.h"
 #include"Calculate.h"
 #include<iostream>
 #include<windows.h>
 using namespace std;
 
 int temp = 0;
-deque<string> C_expression;
-deque<string> C_result;
+deque<string> C_expression;//Store all the formulas,it is a global variable
+deque<string> C_result;//Store all the result,it is a global variable
 
 Generate::Generate()
 {
@@ -102,7 +101,7 @@ void Generate::random() //Automatically generate integers and fractions
     }
 }
 
-void Generate::GenerateExpression(int n)
+void Generate::GenerateExpression(int n)//Generate the formula
 {
     for (int i = 1;i <= n;i++)
     {

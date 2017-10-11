@@ -4,6 +4,7 @@
 #include "global.h"
 #include "fraction.h"
 #include "Generate.h"
+#include<QtCore>
 using namespace std;
 extern deque<string> C_expression;
 extern deque<string> C_result;
@@ -19,6 +20,11 @@ simchinese::simchinese(QWidget *parent) :
     ui->textEdit_2->setReadOnly(true);
     ui->lineEdit->setReadOnly(true);
     ui->lineEdit_3->setReadOnly(true);
+    ui->textEdit->setReadOnly(true);
+
+    simtimer = new QTimer(this);//new Timer()
+    simTimeRecord =new QTime(0,0,0);
+    QObject::connect(simtimer,SIGNAL(timeout()),this,SLOT(timeUpdate()));
 }
 
 simchinese::~simchinese()
@@ -26,7 +32,7 @@ simchinese::~simchinese()
     delete ui;
 }
 
-void simchinese::print()
+void simchinese::print()//show the formula
 {
     string s=C_expression.front();
     QString qs=QString::fromStdString(s);
@@ -34,9 +40,17 @@ void simchinese::print()
     C_expression.pop_front();
 }
 
-void simchinese::receiveshow()//接收信号，显示界面
+void simchinese::timeUpdate()
+{
+    *simTimeRecord = simTimeRecord->addSecs(1);
+    QString strTime = simTimeRecord->toString("hh:mm:ss");
+    ui->lcdNumber->display(strTime);
+}
+
+void simchinese::receiveshow()//receive the signal,show the interface
 {
     this->show();
+    simtimer->start(1000);
     j=1;
     QString s=QString::number(j,10);
     ui->lineEdit_3->setText(s);
@@ -59,6 +73,7 @@ void simchinese::on_pushButton_2_clicked()//exit
 
 void simchinese::on_pushButton_3_clicked()//commit
 {
+    //Determine the correctness
     int cnt = 100/global::globaldata;
     int cou = 0;
     QString kp="";
@@ -83,6 +98,7 @@ void simchinese::on_pushButton_3_clicked()//commit
         kp.append("\n");
     }
 
+    //show the conclusion
     if(j == global::globaldata)
     {
         QString kp1="本次共有";
@@ -97,6 +113,7 @@ void simchinese::on_pushButton_3_clicked()//commit
         {
             QString kp2="本次得分: 100 分";
             kp.append(kp2);
+            kp.append("\n");
         }
         else
         {
@@ -107,8 +124,16 @@ void simchinese::on_pushButton_3_clicked()//commit
             kp.append(str);
             QString kp4="分";
             kp.append(kp4);
+            kp.append("\n");
         }
 
+        simtimer->stop();
+
+        QString strTime = simTimeRecord->toString("hh:mm:ss");
+        QString kp7="总时间: ";
+        kp.append(kp7);
+        kp.append(strTime);
+        kp.append("\n");
 
     }
     ui->textEdit->setText(kp);
@@ -117,6 +142,7 @@ void simchinese::on_pushButton_3_clicked()//commit
 
 void simchinese::on_pushButton_4_clicked()//next
 {
+    //show the next formula
     j++;
     QString nul="";
     if(j<=global::globaldata)

@@ -13,7 +13,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::receivereturn()
+void MainWindow::receivereturn()//Receive the signal,show the interface
 {
     this->show();
 }

@@ -4,9 +4,10 @@
 #include "global.h"
 #include "fraction.h"
 #include "Generate.h"
+#include<QtCore>
 using namespace std;
-extern deque<string> C_expression;
-extern deque<string> C_result;
+extern deque<string> C_expression;//Reference global variable
+extern deque<string> C_result;//Reference global variable
 
 
 int k;
@@ -19,13 +20,17 @@ trachinese::trachinese(QWidget *parent) :
     ui->textEdit_2->setReadOnly(true);
     ui->lineEdit->setReadOnly(true);
     ui->lineEdit_3->setReadOnly(true);
+
+    tratimer = new QTimer(this);//new Timer()
+    traTimeRecord =new QTime(0,0,0);
+    QObject::connect(tratimer,SIGNAL(timeout()),this,SLOT(timeUpdate()));
 }
 
 trachinese::~trachinese()
 {
     delete ui;
 }
-void trachinese::print()
+void trachinese::print()//show the formula
 {
     string s=C_expression.front();
     QString qs=QString::fromStdString(s);
@@ -33,14 +38,22 @@ void trachinese::print()
     C_expression.pop_front();
 }
 
-void trachinese::receiveshow()//接收信号，显示界面
+void trachinese::receiveshow()//Receive the signal,show the interface
 {
     this->show();
+    tratimer->start(1000);
     k=1;
     QString s=QString::number(k,10);
     ui->lineEdit_3->setText(s);
 
     print();
+}
+
+void trachinese::timeUpdate()
+{
+    *traTimeRecord = traTimeRecord->addSecs(1);
+    QString strTime = traTimeRecord->toString("hh:mm:ss");
+    ui->lcdNumber->display(strTime);
 }
 
 void trachinese::on_pushButton_clicked()//return
@@ -58,6 +71,7 @@ void trachinese::on_pushButton_2_clicked()//exit
 
 void trachinese::on_pushButton_3_clicked()//commit
 {
+    //Determine the correctness
     int cnt = 100/global::globaldata;
     int cou = 0;
     QString kp="";
@@ -82,6 +96,7 @@ void trachinese::on_pushButton_3_clicked()//commit
         kp.append("\n");
     }
 
+    //show the conclusion
     if(k == global::globaldata)
     {
         QString kp1="本次共有 ";
@@ -96,6 +111,7 @@ void trachinese::on_pushButton_3_clicked()//commit
         {
             QString kp2="本次得分: 100 分";
             kp.append(kp2);
+            kp.append("\n");
         }
         else
         {
@@ -106,8 +122,16 @@ void trachinese::on_pushButton_3_clicked()//commit
             kp.append(str);
             QString kp4="分";
             kp.append(kp4);
+            kp.append("\n");
         }
 
+        tratimer->stop();
+
+        QString strTime = traTimeRecord->toString("hh:mm:ss");
+        QString kp7="總時間: ";
+        kp.append(kp7);
+        kp.append(strTime);
+        kp.append("\n");
 
     }
     ui->textEdit->setText(kp);
@@ -115,6 +139,7 @@ void trachinese::on_pushButton_3_clicked()//commit
 
 void trachinese::on_pushButton_4_clicked()//next
 {
+    //show the next formula
     k++;
     QString nul="";
     if(k<=global::globaldata)
@@ -123,6 +148,7 @@ void trachinese::on_pushButton_4_clicked()//next
         ui->lineEdit_3->setText(s);
         ui->lineEdit_2->setText(nul);
         ui->textEdit->setText(nul);
+        ui->textEdit->setReadOnly(true);
 
         print();
     }

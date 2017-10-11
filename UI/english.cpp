@@ -4,6 +4,7 @@
 #include "global.h"
 #include "fraction.h"
 #include "Generate.h"
+#include<QtCore>
 using namespace std;
 extern deque<string> C_expression;
 extern deque<string> C_result;
@@ -19,6 +20,11 @@ English::English(QWidget *parent) :
     ui->textEdit_2->setReadOnly(true);
     ui->lineEdit->setReadOnly(true);
     ui->lineEdit_3->setReadOnly(true);
+    ui->textEdit->setReadOnly(true);
+
+    engtimer = new QTimer(this);//new Timer()
+    engTimeRecord =new QTime(0,0,0);
+    QObject::connect(engtimer,SIGNAL(timeout()),this,SLOT(timeUpdate()));
 }
 
 English::~English()
@@ -26,7 +32,7 @@ English::~English()
     delete ui;
 }
 
-void English::print()
+void English::print()//Show the formula
 {
     string s=C_expression.front();
     QString qs=QString::fromStdString(s);
@@ -34,14 +40,22 @@ void English::print()
     C_expression.pop_front();
 }
 
-void English::receiveshow()//接收信号，显示界面
+void English::receiveshow()//Receive the signal,show interface
 {
     this->show();
+    engtimer->start(1000);
     i=1;
     QString s=QString::number(i,10);
     ui->lineEdit_3->setText(s);
 
     print();
+}
+
+void English::timeUpdate()
+{
+    *engTimeRecord = engTimeRecord->addSecs(1);
+    QString strTime = engTimeRecord->toString("hh:mm:ss");
+    ui->lcdNumber->display(strTime);
 }
 
 void English::on_pushButton_clicked()//return
@@ -59,6 +73,7 @@ void English::on_pushButton_2_clicked()//exit
 
 void English::on_pushButton_3_clicked()//commit
 {
+    //Determine the correctness
     int cnt = 100/global::globaldata;
     int cou = 0;
     QString kp="";
@@ -84,6 +99,7 @@ void English::on_pushButton_3_clicked()//commit
         ui->textEdit->setText(kp);
     }
 
+    //Show the conclusion
     if(i == global::globaldata)
     {
         QString kp1="This is a total of ";
@@ -98,6 +114,7 @@ void English::on_pushButton_3_clicked()//commit
         {
             QString kp2="The score: 100 points";
             kp.append(kp2);
+            kp.append("\n");
         }
         else
         {
@@ -106,10 +123,17 @@ void English::on_pushButton_3_clicked()//commit
             int kk=cou*cnt;
             QString str=QString::number(kk,'f',2);
             kp.append(str);
-            QString kp4="points";
+            QString kp4=" points";
             kp.append(kp4);
+            kp.append("\n");
         }
+        engtimer->stop();
 
+        QString strTime = engTimeRecord->toString("hh:mm:ss");
+        QString kp7="The time: ";
+        kp.append(kp7);
+        kp.append(strTime);
+        kp.append("\n");
 
     }
     ui->textEdit->setText(kp);
@@ -118,6 +142,7 @@ void English::on_pushButton_3_clicked()//commit
 
 void English::on_pushButton_4_clicked()//next
 {
+    //show the next formula,and clear the text
     i++;
     QString nul="";
     if(i<=global::globaldata)

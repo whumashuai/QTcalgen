@@ -19,16 +19,18 @@ public:
 
 private slots:
 
-    void on_pushButton_clicked();
+    void on_pushButton_clicked();//commit
 
-    void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();//return
 
-    void receiveshow();//与发射的信号关联的槽
-    void receivereturn();//与发射的信号关联的槽
+    void receiveshow();//The signal is associated with the slot
+
+    void receivereturn();//与The signal is associated with the slot
+
 
 signals:
-    void tranumshowmain();//显示界面
-    void trashow();//show trachinese
+    void tranumshowmain();//show mainWindow singal
+    void trashow();//show trachinese interface singal
 
 private:
     Ui::tranum *ui;

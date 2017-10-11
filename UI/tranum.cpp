@@ -16,12 +16,12 @@ tranum::~tranum()
     delete ui;
 }
 
-void tranum::receiveshow()
+void tranum::receiveshow()//Receive the signal,show the interface
 {
     this->show();
 }
 
-void tranum::receivereturn()
+void tranum::receivereturn()//Receive the signal,show the interface
 {
     this->show();
 }
@@ -38,11 +38,11 @@ void tranum::on_pushButton_clicked()//commit
     gn->GenerateExpression(global::globaldata);
 
     this->hide();
-    emit trashow();
+    emit trashow();//send the signal
 }
 
 void tranum::on_pushButton_2_clicked()//return
 {
     this->hide();
-    emit tranumshowmain();
+    emit tranumshowmain();//send the signal
 }

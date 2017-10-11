@@ -2,7 +2,8 @@
 #define ENGLISH_H
 
 #include <QDialog>
-
+#include<QtCore>
+#include<QTime>
 
 
 namespace Ui {
@@ -23,18 +24,25 @@ private slots:
 
     void on_pushButton_2_clicked();//exit
 
-    void receiveshow();//与发射的信号关联的槽
+    void receiveshow();//The signal is associated with the slot
 
-    void on_pushButton_3_clicked();
+    void on_pushButton_3_clicked();//commit
 
-    void on_pushButton_4_clicked();
+    void on_pushButton_4_clicked();//next
+
+    void timeUpdate();//uodate time
 
 signals:
     void engshownum();//show engnum
-    void quit();//退出
+    void quit();//exit
+
 
 private:
     Ui::English *ui;
+
+    QTimer *engtimer;
+    QTime *engTimeRecord;//record time
+
 };
 
 #endif // ENGLISH_H

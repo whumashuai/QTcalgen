@@ -16,12 +16,12 @@ simnum::~simnum()
     delete ui;
 }
 
-void simnum::receiveshow()
+void simnum::receiveshow()//Receive the signal,show the interface
 {
     this->show();
 }
 
-void simnum::receivereturn()
+void simnum::receivereturn()//Receive the signal,show the interface
 {
     this->show();
 }
@@ -38,11 +38,11 @@ void simnum::on_pushButton_2_clicked()//commit
     gn->GenerateExpression(global::globaldata);
 
     this->hide();
-    emit simshow();
+    emit simshow();//send the signal
 }
 
 void simnum::on_pushButton_3_clicked()//return
 {
     this->hide();
-    emit simnumshowmain();
+    emit simnumshowmain();//send the signal
 }

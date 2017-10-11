@@ -24,16 +24,16 @@ private slots:
 
     void on_pushButton_4_clicked();//exit
 
-    void receivereturn();//与发射的信号关联的槽
+    void receivereturn();//The signal is associated with the slot
 
 private:
     Ui::MainWindow *ui;
 
 signals:
-    void quit();//退出信号
-    void signalsim();//显示中文简体界面信号
-    void signaltra();//显示中文繁体界面信号
-    void signalEng();//显示英文界面信号
+    void quit();//exit
+    void signalsim();//Display Simplified Chinese interface signal
+    void signaltra();//Display Traditional Chinese interface signal
+    void signalEng();//Display English interface signal
 };
 
 #endif // MAINWINDOW_H

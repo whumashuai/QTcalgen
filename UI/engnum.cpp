@@ -17,18 +17,18 @@ engnum::~engnum()
     delete ui;
 }
 
-void engnum::receiveshow()
+void engnum::receiveshow()//Receive the signal,show interface
 {
     this->show();
 }
 
-void engnum::receivereturn()
+void engnum::receivereturn()//Receive the signal,show interface
 {
     this->show();
 }
 
 
-void engnum::on_pushButton_clicked()
+void engnum::on_pushButton_clicked()//commit
 {
     QString data=ui->lineEdit->text();
 
@@ -40,11 +40,11 @@ void engnum::on_pushButton_clicked()
     gn->GenerateExpression(global::globaldata);
 
     this->hide();
-    emit engshow();
+    emit engshow();//send the signal
 }
 
-void engnum::on_pushButton_2_clicked()
+void engnum::on_pushButton_2_clicked()//return
 {
     this->hide();
-    emit engnumshowmain();
+    emit engnumshowmain();//send the signal
 }

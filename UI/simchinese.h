@@ -2,6 +2,7 @@
 #define SIMCHINESE_H
 
 #include <QDialog>
+#include<QtCore>
 
 namespace Ui {
 class simchinese;
@@ -17,22 +18,28 @@ public:
     void print();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_clicked();//return
 
-    void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();//exit
 
-    void receiveshow();//与发射的信号关联的槽
+    void receiveshow();//The signal is associated with the slot
 
-    void on_pushButton_3_clicked();
 
-    void on_pushButton_4_clicked();
+    void on_pushButton_3_clicked();//commit
+
+    void on_pushButton_4_clicked();//next
+
+    void timeUpdate();//uodate time
 
 signals:
-    void simshownum();//show simnum
-    void quit();//退出
+    void simshownum();//show simnum signal
+    void quit();//exit signal
 
 private:
     Ui::simchinese *ui;
+
+    QTimer *simtimer;
+    QTime *simTimeRecord;//record time
 };
 
 #endif // SIMCHINESE_H
